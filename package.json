@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/prize1987/ggmoney_backend/issues"
   },
-  "homepage": "https://github.com/prize1987/ggmoney_backend#readme"
+  "homepage": "https://github.com/prize1987/ggmoney_backend#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  },
+  "type": "module"
 }
