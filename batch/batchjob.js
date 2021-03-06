@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('SELECT * from Users', (error, rows, fields) => {
+connection.query('SELECT * from STORE_INFO', (error, rows, fields) => {
   if (error) throw error;
   console.log('User info is: ', rows);
 });
