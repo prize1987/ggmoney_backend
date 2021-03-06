@@ -1,0 +1,19 @@
+{
+  "name": "ggmoney_backend",
+  "version": "1.0.0",
+  "description": "경기지역화폐 가맹점 검색 App의 Back-end 프로그램 (Node.js)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prize1987/ggmoney_backend.git"
+  },
+  "author": "yoongikoon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prize1987/ggmoney_backend/issues"
+  },
+  "homepage": "https://github.com/prize1987/ggmoney_backend#readme"
+}
