@@ -60,7 +60,6 @@ export default class database {
     const query = `SELECT COUNT(*) CNT FROM STORE_INFO WHERE SIGUN_NM = '${sigun}'`;
 
     const result = await this.select(query);
-    console.log(result);
     return result[0].CNT;
   };
 }
