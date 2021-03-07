@@ -8,9 +8,9 @@ const main = async () => {
 
   const data = await api.getSigunData(1, 10, '수원시');
 
-  db.insertStoreInfo(data);
+  await db.insertStoreInfo(data);
 
-  const cnt = db.getStoreInfoCount('수원시');
+  const cnt = await db.getStoreInfoCount('수원시');
   console.log(cnt);
 };
 
