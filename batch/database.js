@@ -40,4 +40,27 @@ export default class database {
       });
     });
   };
+
+  insertStoreInfo = async (data) => {
+    const query = `INSERT INTO STORE_INFO (CMPNM_NM,
+      INDUTYPE_NM,
+      TELNO,
+      REFINE_LOTNO_ADDR,
+      REFINE_ROADNM_ADDR,
+      REFINE_ZIP_CD,
+      REFINE_WGS84_LOGT,
+      REFINE_WGS84_LAT,
+      SIGUN_NM) VALUES ?`;
+
+    const result = await this.insert(query, data);
+    console.log(result);
+  };
+
+  getStoreInfoCount = async (sigun) => {
+    const query = `SELECT COUNT(*) CNT FROM STORE_INFO WHERE SIGUN_NM = '${sigun}'`;
+
+    const result = await this.select(query);
+    console.log(result);
+    return result[0].CNT;
+  };
 }
