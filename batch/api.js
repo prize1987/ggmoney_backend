@@ -41,7 +41,7 @@ const getSigunData = async (pIndex, pSize, pSigun) => {
 
 const getSigunDataCount = async (sigun) => {
   const url = 'https://openapi.gg.go.kr/RegionMnyFacltStus';
-  const appKey = API_KEY_GGMONEY;
+  const appKey = API_KEY;
   const pIndex = 1;
   const pSize = 1;
   const type = 'json';

@@ -10,8 +10,9 @@ const main = async () => {
 
   await db.insertStoreInfo(data);
 
+  const apicnt = await api.getSigunDataCount('수원시');
   const cnt = await db.getStoreInfoCount('수원시');
-  console.log(cnt);
+  console.log(apicnt, cnt);
 };
 
 main();
