@@ -19,18 +19,23 @@ connection.query('SELECT * from STORE_INFO', (error, rows, fields) => {
 
 connection.end();
 
-const apiTest = () => {
+const apiTest = async () => {
   const url = 'https://openapi.gg.go.kr/RegionMnyFacltStus';
   const appKey = process.env.API_KEY_GGMONEY;
   const pIndex = 1;
   const pSize = 10;
   const type = 'json';
+  const sigun = '수원시';
 
   let fetch_url = url + '?KEY=' + appKey;
   fetch_url += '&pIndex=' + pIndex;
   fetch_url += '&pSize=' + pSize;
   fetch_url += '&type=' + type;
   fetch_url += '&SIGUN_NM=' + sigun;
+
+  const response = await fetch(fetch_url);
+  const json = await response.json();
+  console.log(json);
 };
 
 apiTest();
