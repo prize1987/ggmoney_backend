@@ -3,12 +3,12 @@ import database from './database.js';
 
 const db = new database();
 
-const updateSigun = async () => {
+const updateSigun = async (sigun) => {
   db.connect();
 
   // 1. API Count, DB Count get
-  const apicnt = await api.getSigunDataCount('수원시');
-  const dbcnt = await db.getStoreInfoCount('수원시');
+  const apicnt = await api.getSigunDataCount(sigun);
+  const dbcnt = await db.getStoreInfoCount(sigun);
   console.log(apicnt, dbcnt);
 
   if (apicnt === dbcnt) {
