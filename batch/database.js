@@ -34,8 +34,26 @@ export default class database {
   insert = (query, values) => {
     return new Promise((resolve, reject) => {
       this.connection.query(query, [values], (error, result) => {
-        if (error) reject(error);
-        // console.log('User info is: ', rows);
+        if (error) {
+          this.connection.rollback();
+          reject(error);
+        }
+
+        this.connection.commit();
+        resolve(result);
+      });
+    });
+  };
+
+  update = (query) => {
+    return new Promise((resolve, reject) => {
+      this.connection.query(query, (error, result) => {
+        if (error) {
+          this.connection.rollback();
+          reject(error);
+        }
+
+        this.connection.commit();
         resolve(result);
       });
     });
@@ -53,13 +71,44 @@ export default class database {
       SIGUN_NM) VALUES ?`;
 
     const result = await this.insert(query, data);
-    console.log(result);
+    console.log('insert complete. ' + result.message);
   };
 
-  getStoreInfoCount = async (sigun) => {
-    const query = `SELECT COUNT(*) CNT FROM STORE_INFO WHERE SIGUN_NM = '${sigun}'`;
+  deleteStoreInfo = async (sigun) => {
+    const query = `DELETE FROM STORE_INFO
+      WHERE SIGUN_NM = '${sigun}'`;
+
+    const result = await this.update(query);
+    console.log('delete count : ' + result.affectedRows);
+  };
+
+  selectStoreInfoCount = async (sigun) => {
+    const query = `SELECT COUNT(*) AS CNT FROM STORE_INFO WHERE SIGUN_NM = '${sigun}'`;
 
     const result = await this.select(query);
     return result[0].CNT;
+  };
+
+  selectSigunDataCount = async (sigun) => {
+    const query = `SELECT DATA_COUNT FROM SIGUN_INFO WHERE SIGUN_NM = '${sigun}'`;
+
+    const result = await this.select(query);
+    return result[0].DATA_COUNT;
+  };
+
+  updateSigunCount = async (sigun, count) => {
+    const query = `UPDATE SIGUN_INFO
+      SET DATA_COUNT = ${count}
+      WHERE SIGUN_NM = '${sigun}'`;
+
+    const result = await this.update(query);
+    console.log('update count : ' + result.affectedRows);
+  };
+
+  selectSigunList = async () => {
+    const query = `SELECT DISTINCT SIGUN_NM FROM SIGUN_INFO`;
+
+    const result = await this.select(query);
+    return result;
   };
 }
