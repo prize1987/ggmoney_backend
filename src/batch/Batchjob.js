@@ -1,7 +1,7 @@
 import * as api from './api.js';
-import database from './database.js';
+import Database from '../database/Database.js';
 
-const db = new database();
+const db = new Database();
 const PAGESIZE = 1000;
 
 const updateSigun = async (sigun) => {
@@ -45,6 +45,7 @@ const updateSigun = async (sigun) => {
 
 const main = async () => {
   db.connect();
+
   const sigunList = await db.selectSigunList();
 
   for await (const sigun of sigunList) {
