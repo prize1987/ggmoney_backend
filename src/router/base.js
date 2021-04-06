@@ -8,16 +8,27 @@ router.get('/', (req, res) => {
   res.send('root response');
 });
 
-router.get('/test', async (req, res) => {
+router.get('/getStoreInfo', async (req, res) => {
   const indutype = req.query.indutype;
   const conditions = req.query.conditions;
   const from = req.query.from;
   const limit = req.query.limit;
 
-  const testData = await db.selectStoreInfo();
-  res.json(testData);
-  // console.log(testData, testData.length);
-  console.log(indutype, conditions, from, limit, testData.length);
+  const result = await db.selectStoreInfo(indutype, conditions, from, limit);
+  res.json(result);
+});
+
+router.get('/getStoreInfoByArea', async (req, res) => {
+  const indutype = req.query.indutype;
+  const conditions = req.query.conditions;
+  const lat_lcl = req.query.lat_lcl;
+  const lat_ucl = req.query.lat_ucl;
+  const lon_lcl = req.query.lon_lcl;
+  const lon_ucl = req.query.lon_ucl;
+  const limit = req.query.limit;
+
+  const result = await db.selectStoreInfoByArea(indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit);
+  res.json(result);
 });
 
 export default router;

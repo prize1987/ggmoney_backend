@@ -116,8 +116,97 @@ export default class database {
     return result;
   };
 
-  selectStoreInfo = async () => {
-    const query = `SELECT CMPNM_NM,
+  createIndutypeCon = (indutype) => {
+    let con = " AND (INDUTYPE_NM LIKE '%";
+
+    switch (indutype) {
+      case '숙박':
+        con += "숙박업%') ";
+        break;
+      case '여행':
+        con += "여행%') ";
+        break;
+      case '레저':
+        con += "레저%' ";
+        con += " OR INDUTYPE_NM LIKE '%레져%') ";
+        break;
+      case '문화/취미':
+        con += "문화%' ";
+        con += " OR INDUTYPE_NM LIKE '%취미%') ";
+        break;
+      case '의류/잡화/생활가전':
+        con += "의류%' ";
+        con += " OR INDUTYPE_NM LIKE '%잡화%' ";
+        con += " OR INDUTYPE_NM LIKE '%주방%' ";
+        con += " OR INDUTYPE_NM LIKE '%직물%' ";
+        con += " OR INDUTYPE_NM LIKE '%가구%' ";
+        con += " OR INDUTYPE_NM LIKE '%자재%' ";
+        con += " OR INDUTYPE_NM LIKE '%제품%' ";
+        con += " OR INDUTYPE_NM LIKE '%농업%') ";
+        break;
+      case '주유소':
+        con += "연료판매점%') ";
+        break;
+      case '유통/편의점':
+        con += "유통%' ";
+        con += " OR INDUTYPE_NM LIKE '%도매%' ";
+        con += " OR INDUTYPE_NM LIKE '%소매%') ";
+        break;
+      case '서적/문구':
+        con += "서적%') ";
+        break;
+      case '학원':
+        con += "학원%') ";
+        break;
+      case '사무통신':
+        con += "사무통신%') ";
+        break;
+      case '자동차판매/정비':
+        con += "자동차%') ";
+        break;
+      case '서비스':
+        con += "서비스%') ";
+        break;
+      case '보험':
+        con += "보험%') ";
+        break;
+      case '병원':
+        con += "병원%' ";
+        con += " OR INDUTYPE_NM LIKE '%의원%') ";
+        con += " AND INDUTYPE_NM NOT LIKE '%기타의료기관%' ";
+        break;
+      case '약국':
+        con += "약국%') ";
+        break;
+      case '기타 의료기관':
+        con += "기타의료기관%') ";
+        break;
+      case '미용/안경/보건위생':
+        con += "보건위생%') ";
+        break;
+      case '음식점':
+        con += "음식%') ";
+        break;
+      case '제과/음료식품':
+        con += "식품%') ";
+        break;
+      case '기타':
+        con += "기타%' ";
+        con += " OR INDUTYPE_NM LIKE '%별도%' ";
+        con += " OR INDUTYPE_NM LIKE '%회원제%') ";
+        break;
+      case '전체':
+      case '':
+      default:
+        con += "%') ";
+        break;
+    }
+
+    return con;
+  };
+
+  selectStoreInfo = async (indutype, conditions, from, limit) => {
+    let query = `SELECT CMPNM_NM,
       INDUTYPE_NM,
       TELNO,
       REFINE_LOTNO_ADDR,
@@ -127,26 +216,60 @@ export default class database {
       REFINE_WGS84_LAT,
       SIGUN_NM 
       FROM STORE_INFO 
-      WHERE 1=1
-      LIMIT ?, ?`;
+      WHERE 1=1`;
 
-    // for (let i = 1; i <= conditionList.length; i++) {
-    //   selectQuery +=
-    //     ' AND (CMPNM_NM LIKE ?' +
-    //     i +
-    //     ' OR REFINE_LOTNO_ADDR LIKE ?' +
-    //     i +
-    //     ' OR REFINE_ROADNM_ADDR LIKE ?' +
-    //     i +
-    //     ' OR INDUTYPE_NM LIKE ?' +
-    //     i +
-    //     ')';
-    //   conditionList[i - 1] = '%' + conditionList[i - 1] + '%';
-    // }
+    conditions.split(' ').forEach((condition) => {
+      query += mysql.format(
+        ` AND (CMPNM_NM LIKE ?
+          OR REFINE_LOTNO_ADDR LIKE ?
+          OR REFINE_ROADNM_ADDR LIKE ?
+          OR INDUTYPE_NM LIKE ?)`,
+        Array(4).fill(`%${condition}%`)
+      );
+    });
 
-    // selectQuery += this.createIndutypeCon(indutype);
+    query += this.createIndutypeCon(indutype);
+    query += mysql.format(` LIMIT ?, ?`, [+from, +limit]);
 
-    const result = await this.select(query, [100, 2]);
+    const result = await this.select(query);
+    return result;
+  };
+
+  selectStoreInfoByArea = async (indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit) => {
+    let query = `SELECT CMPNM_NM,
+      INDUTYPE_NM,
+      TELNO,
+      REFINE_LOTNO_ADDR,
+      REFINE_ROADNM_ADDR,
+      REFINE_ZIP_CD,
+      REFINE_WGS84_LOGT,
+      REFINE_WGS84_LAT,
+      SIGUN_NM 
+      FROM STORE_INFO 
+      WHERE 1=1`;
+
+    conditions.split(' ').forEach((condition) => {
+      query += mysql.format(
+        ` AND (CMPNM_NM LIKE ?
+          OR REFINE_LOTNO_ADDR LIKE ?
+          OR REFINE_ROADNM_ADDR LIKE ?
+          OR INDUTYPE_NM LIKE ?)`,
+        Array(4).fill(`%${condition}%`)
+      );
+    });
+
+    query += mysql.format(
+      ` AND CONVERT(REFINE_WGS84_LAT, DOUBLE) >= ?
+        AND CONVERT(REFINE_WGS84_LAT, DOUBLE) <= ?
+        AND CONVERT(REFINE_WGS84_LOG, DOUBLE) >= ?
+        AND CONVERT(REFINE_WGS84_LOG, DOUBLE) <= ?`,
+      [+lat_lcl, +lat_ucl, +lon_lcl, +lon_ucl]
+    );
+
+    query += this.createIndutypeCon(indutype);
+    query += mysql.format(` LIMIT 0, ?`, +limit);
+
+    const result = await this.select(query);
     return result;
   };
 }
