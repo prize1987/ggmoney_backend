@@ -95,14 +95,14 @@ export default class database {
   };
 
   // select
-  selectStoreInfoCount = async (sigun) => {
+  selectSigunDataCount = async (sigun) => {
     const query = `SELECT COUNT(*) AS CNT FROM STORE_INFO WHERE SIGUN_NM = '${sigun}'`;
 
     const result = await this.select(query);
     return result[0].CNT;
   };
 
-  selectSigunDataCount = async (sigun) => {
+  selectSigunDataCountMaster = async (sigun) => {
     const query = `SELECT DATA_COUNT FROM SIGUN_INFO WHERE SIGUN_NM = '${sigun}'`;
 
     const result = await this.select(query);
@@ -230,6 +230,27 @@ export default class database {
 
     query += this.createIndutypeCon(indutype);
     query += mysql.format(` LIMIT ?, ?`, [+from, +limit]);
+
+    const result = await this.select(query);
+    return result;
+  };
+
+  selectStoreInfoCount = async (indutype, conditions) => {
+    let query = `SELECT COUNT(*) CNT
+      FROM STORE_INFO 
+      WHERE 1=1`;
+
+    conditions.split(' ').forEach((condition) => {
+      query += mysql.format(
+        ` AND (CMPNM_NM LIKE ?
+          OR REFINE_LOTNO_ADDR LIKE ?
+          OR REFINE_ROADNM_ADDR LIKE ?
+          OR INDUTYPE_NM LIKE ?)`,
+        Array(4).fill(`%${condition}%`)
+      );
+    });
+
+    query += this.createIndutypeCon(indutype);
 
     const result = await this.select(query);
     return result;

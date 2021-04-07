@@ -18,6 +18,14 @@ router.get('/getStoreInfo', async (req, res) => {
   res.json(result);
 });
 
+router.get('/getStoreInfoCount', async (req, res) => {
+  const indutype = req.query.indutype;
+  const conditions = req.query.conditions;
+
+  const result = await db.selectStoreInfoCount(indutype, conditions);
+  res.json(result);
+});
+
 router.get('/getStoreInfoByArea', async (req, res) => {
   const indutype = req.query.indutype;
   const conditions = req.query.conditions;

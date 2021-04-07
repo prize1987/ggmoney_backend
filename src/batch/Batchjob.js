@@ -7,7 +7,7 @@ const PAGESIZE = 1000;
 const updateSigun = async (sigun) => {
   // 1. API Count, DB Count get
   const apicnt = await api.getSigunDataCount(sigun);
-  let dbcnt = await db.selectSigunDataCount(sigun);
+  let dbcnt = await db.selectSigunDataCountMaster(sigun);
   console.log(`DB : ${dbcnt}, API : ${apicnt}`);
 
   if (apicnt === dbcnt) {
@@ -37,7 +37,7 @@ const updateSigun = async (sigun) => {
   console.log('insert complete');
 
   // 5. API Count, DB Count
-  dbcnt = await db.selectStoreInfoCount(sigun);
+  dbcnt = await db.selectSigunDataCount(sigun);
 
   // 6. DB Count 마스터 테이블에 기록
   await db.updateSigunCount(sigun, dbcnt);
