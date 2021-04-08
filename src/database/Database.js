@@ -268,7 +268,7 @@ export default class database {
     return result;
   };
 
-  selectStoreInfoByArea = async (indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit) => {
+  selectStoreInfoByArea = async (sigun, indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit) => {
     let query = `SELECT CMPNM_NM,
       INDUTYPE_NM,
       TELNO,
@@ -280,6 +280,12 @@ export default class database {
       SIGUN_NM 
       FROM STORE_INFO 
       WHERE 1=1`;
+
+    const sigunList = sigun
+      .split(' ')
+      .map((item) => `'${item}'`)
+      .join(',');
+    query += ` AND SIGUN_NM IN (${sigunList})`;
 
     conditions.split(' ').forEach((condition) => {
       query += mysql.format(
