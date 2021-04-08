@@ -300,8 +300,8 @@ export default class database {
     query += mysql.format(
       ` AND CONVERT(REFINE_WGS84_LAT, DOUBLE) >= ?
         AND CONVERT(REFINE_WGS84_LAT, DOUBLE) <= ?
-        AND CONVERT(REFINE_WGS84_LOG, DOUBLE) >= ?
-        AND CONVERT(REFINE_WGS84_LOG, DOUBLE) <= ?`,
+        AND CONVERT(REFINE_WGS84_LOGT, DOUBLE) >= ?
+        AND CONVERT(REFINE_WGS84_LOGT, DOUBLE) <= ?`,
       [+lat_lcl, +lat_ucl, +lon_lcl, +lon_ucl]
     );
 
