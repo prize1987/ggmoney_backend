@@ -205,7 +205,7 @@ export default class database {
     return con;
   };
 
-  selectStoreInfo = async (indutype, conditions, from, limit) => {
+  selectStoreInfo = async (sigun, indutype, conditions, from, limit) => {
     let query = `SELECT CMPNM_NM,
       INDUTYPE_NM,
       TELNO,
@@ -217,6 +217,12 @@ export default class database {
       SIGUN_NM 
       FROM STORE_INFO 
       WHERE 1=1`;
+
+    const sigunList = sigun
+      .split(' ')
+      .map((item) => `'${item}'`)
+      .join(',');
+    query += ` AND SIGUN_NM IN (${sigunList})`;
 
     conditions.split(' ').forEach((condition) => {
       query += mysql.format(
@@ -235,10 +241,16 @@ export default class database {
     return result;
   };
 
-  selectStoreInfoCount = async (indutype, conditions) => {
+  selectStoreInfoCount = async (sigun, indutype, conditions) => {
     let query = `SELECT COUNT(*) CNT
       FROM STORE_INFO 
       WHERE 1=1`;
+
+    const sigunList = sigun
+      .split(' ')
+      .map((item) => `'${item}'`)
+      .join(',');
+    query += ` AND SIGUN_NM IN (${sigunList})`;
 
     conditions.split(' ').forEach((condition) => {
       query += mysql.format(

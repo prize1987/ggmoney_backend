@@ -9,20 +9,22 @@ router.get('/', (req, res) => {
 });
 
 router.get('/getStoreInfo', async (req, res) => {
+  const sigun = req.query.sigun;
   const indutype = req.query.indutype;
   const conditions = req.query.conditions;
   const from = req.query.from;
   const limit = req.query.limit;
 
-  const result = await db.selectStoreInfo(indutype, conditions, from, limit);
+  const result = await db.selectStoreInfo(sigun, indutype, conditions, from, limit);
   res.json(result);
 });
 
 router.get('/getStoreInfoCount', async (req, res) => {
+  const sigun = req.query.sigun;
   const indutype = req.query.indutype;
   const conditions = req.query.conditions;
 
-  const result = await db.selectStoreInfoCount(indutype, conditions);
+  const result = await db.selectStoreInfoCount(sigun, indutype, conditions);
   res.json(result);
 });
 
