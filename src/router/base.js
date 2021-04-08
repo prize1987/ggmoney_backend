@@ -29,6 +29,7 @@ router.get('/getStoreInfoCount', async (req, res) => {
 });
 
 router.get('/getStoreInfoByArea', async (req, res) => {
+  const sigun = req.query.sigun;
   const indutype = req.query.indutype;
   const conditions = req.query.conditions;
   const lat_lcl = req.query.lat_lcl;
@@ -37,7 +38,7 @@ router.get('/getStoreInfoByArea', async (req, res) => {
   const lon_ucl = req.query.lon_ucl;
   const limit = req.query.limit;
 
-  const result = await db.selectStoreInfoByArea(indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit);
+  const result = await db.selectStoreInfoByArea(sigun, indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit);
   res.json(result);
 });
 
