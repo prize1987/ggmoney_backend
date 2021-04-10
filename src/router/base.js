@@ -1,17 +1,11 @@
 import express from 'express';
 import Database from '../database/Database.js';
-import fetch from 'node-fetch';
 
 const router = express.Router();
 const db = new Database();
 
 router.get('/', async (req, res) => {
   res.send('root response');
-
-  const url = 'https://prize1987.github.io/ggmoney_backend/config/config.json';
-  const response = await fetch(url);
-  const text = await response.text();
-  console.log(text);
 });
 
 router.get('/getStoreInfo', async (req, res) => {

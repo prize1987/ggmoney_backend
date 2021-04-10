@@ -10,7 +10,7 @@ export default class database {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      connectionLimit: 100,
+      connectionLimit: 1000,
     });
   }
 
@@ -211,7 +211,7 @@ export default class database {
     return con;
   };
 
-  selectStoreInfo = async (sigun, indutype, conditions, from, limit) => {
+  selectStoreInfo = async (sigun = '', indutype = '', conditions = '', from = 0, limit = 10) => {
     let query = `SELECT CMPNM_NM,
       INDUTYPE_NM,
       TELNO,
@@ -247,7 +247,7 @@ export default class database {
     return result;
   };
 
-  selectStoreInfoCount = async (sigun, indutype, conditions) => {
+  selectStoreInfoCount = async (sigun = '', indutype = '', conditions = '') => {
     let query = `SELECT COUNT(*) CNT
       FROM STORE_INFO 
       WHERE 1=1`;
@@ -274,7 +274,16 @@ export default class database {
     return result;
   };
 
-  selectStoreInfoByArea = async (sigun, indutype, conditions, lat_lcl, lat_ucl, lon_lcl, lon_ucl, limit) => {
+  selectStoreInfoByArea = async (
+    sigun = '',
+    indutype = '',
+    conditions = '',
+    lat_lcl = 0,
+    lat_ucl = 0,
+    lon_lcl = 0,
+    lon_ucl = 0,
+    limit = 10
+  ) => {
     let query = `SELECT CMPNM_NM,
       INDUTYPE_NM,
       TELNO,

@@ -44,16 +44,12 @@ const updateSigun = async (sigun) => {
 };
 
 const main = async () => {
-  db.connect();
-
   const sigunList = await db.selectSigunList();
 
   for await (const sigun of sigunList) {
     console.log(sigun.SIGUN_NM + ' Start');
     await updateSigun(sigun.SIGUN_NM);
   }
-
-  db.end();
 };
 
 main();
