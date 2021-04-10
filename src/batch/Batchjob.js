@@ -12,7 +12,7 @@ const updateSigun = async (sigun) => {
 
   if (apicnt === dbcnt) {
     console.log(`API, DB 건수 동일하여 작업 Skip함 (${apicnt})`);
-    return;
+    return null;
   }
 
   // 2. API Total 건수 가져와서 iterate count 계산 (1000건씩 끊어 가져오기)
@@ -50,6 +50,8 @@ const main = async () => {
     console.log(sigun.SIGUN_NM + ' Start');
     await updateSigun(sigun.SIGUN_NM);
   }
+
+  db.endConnection();
 };
 
 main();

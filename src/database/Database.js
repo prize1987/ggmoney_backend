@@ -14,6 +14,10 @@ export default class database {
     });
   }
 
+  endConnection = () => {
+    this.pool.end();
+  };
+
   // base method
   select = (query, value) => {
     return new Promise((resolve, reject) => {
