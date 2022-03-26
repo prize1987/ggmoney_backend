@@ -50,7 +50,7 @@ const main = async () => {
   for await (const sigun of sigunList) {
     let retry = 0;
     let pass = false;
-    while (pass && retry < RETRY_CNT) {
+    while (!pass && retry < RETRY_CNT) {
       try {
         console.log(sigun.SIGUN_NM + ' Start');
         await updateSigun(sigun.SIGUN_NM);
