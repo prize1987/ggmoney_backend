@@ -26,17 +26,19 @@ const getSigunData = async (pIndex, pSize, pSigun) => {
   fetch_url += '&SIGUN_NM=' + pSigun;
 
   const data = await request(fetch_url);
-  return data.RegionMnyFacltStus[1].row.map((row) => [
-    row.CMPNM_NM,
-    row.INDUTYPE_NM,
-    row.TELNO,
-    row.REFINE_LOTNO_ADDR,
-    row.REFINE_ROADNM_ADDR,
-    row.REFINE_ZIP_CD,
-    row.REFINE_WGS84_LOGT,
-    row.REFINE_WGS84_LAT,
-    row.SIGUN_NM,
-  ]);
+  return data.RegionMnyFacltStus[1].row
+    .filter((row) => row.LIVE_YN === 'Y')
+    .map((row) => [
+      row.CMPNM_NM,
+      row.INDUTYPE_NM,
+      row.TELNO,
+      row.REFINE_LOTNO_ADDR,
+      row.REFINE_ROADNM_ADDR,
+      row.ZIP_CD,
+      row.LOGT,
+      row.LAT,
+      row.SIGUN_NM,
+    ]);
 };
 
 const getSigunDataCount = async (sigun) => {
