@@ -3,6 +3,7 @@ import Database from '../database/Database.js';
 
 const db = new Database();
 const PAGESIZE = 1000;
+const RETRY_CNT = 5;
 
 const updateSigun = async (sigun) => {
   // 1. API Count, DB Count get
@@ -47,8 +48,18 @@ const main = async () => {
   const sigunList = await db.selectSigunList();
 
   for await (const sigun of sigunList) {
-    console.log(sigun.SIGUN_NM + ' Start');
-    await updateSigun(sigun.SIGUN_NM);
+    let retry = 0;
+    let pass = false;
+    while (pass && retry < RETRY_CNT) {
+      try {
+        console.log(sigun.SIGUN_NM + ' Start');
+        await updateSigun(sigun.SIGUN_NM);
+        pass = true;
+      } catch (e) {
+        retry++;
+        console.log(`retry cnt : ${retry}`, e);
+      }
+    }
   }
 
   db.endConnection();
